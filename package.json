@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "jwt login signup",
   "version": "1.0.0",
   "description": "jwt login signup",
   "license": "ISC",
