@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import argon2 from "argon2";
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -18,6 +19,11 @@ const UserSchema = new mongoose.Schema({
     enum: ["admin", "customer"],
     default: "customer",
   },
+});
+
+//script for hashing user password
+UserSchema.pre("save", async function () {
+  this.password = await argon2.hash(this.password, 12);
 });
 
 export default mongoose.model("Users", UserSchema);
