@@ -14,7 +14,9 @@ const SignupController = async (req, res) => {
     }
     //callinf signup servics for save data and pass user submited inputs as a param
     SignUpService(userData);
-    return res.status(201).json({ message: "User created successfully" });
+    return res
+      .status(201)
+      .json({ message: "User created successfully", User: userData });
   } catch (error) {
     res.status(400).json({ errorMessage: error.message });
   }

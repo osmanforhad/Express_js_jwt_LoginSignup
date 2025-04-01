@@ -1,10 +1,12 @@
 import express from "express";
-import bodyParser from "body-parser";
+import bodyParserMiddleware from "body-parser";
 import DbConnection from "./config/dbConfig.js";
 import route from "./routes/Routes.js";
+import corsMiddleware from "cors";
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParserMiddleware.json());
+app.use(corsMiddleware());
 
 app.use("/api", route);
 
