@@ -1,26 +1,21 @@
 import UserModel from "../models/UserModel.js";
+import SignUpService from "../services/SignUpService.js";
 
 const SignupController = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const userData = req.body;
+    //comapre user inputed email with db is it already exists or not
+    const { email } = userData;
     const userExist = await UserModel.exists({ email: email });
     if (userExist) {
       return res
         .status(400)
-        .json({ message: "user already exists with this email" });
+        .json({ message: "User already exists with this email id" });
     }
-    const createdUser = new UserModel({
-      name,
-      email,
-      password,
-      role: "customer",
-    });
-    //save user input into db
-    const savedUser = await createdUser.save();
-    console.log(savedUser);
-    return res.status(201).json({ message: "success", savedUser });
+    //callinf signup servics for save data and pass user submited inputs as a param
+    SignUpService(userData);
+    return res.status(201).json({ message: "User created successfully" });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ errorMessage: error.message });
   }
 };
