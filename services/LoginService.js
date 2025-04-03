@@ -5,26 +5,25 @@ import generateToken from "../helpers/jwtHelper.js";
 const LoginService = async (email, password) => {
   //script for generate jwt token for loggedin user
   try {
-    //find user from db based on email
+    //find user from db based on user inputed email
     const existingUser = await UserModel.findOne({ email });
+    // Extract the saved hashed password from db and matching  with user input
+    const savedpassword = existingUser.password;
     //compare the user is exists in DB or not
     if (existingUser) {
-      const isPasswordValid = await argon2.compare(
-        password,
-        existingUser.password
-      );
+      const isPasswordValid = argon2.verify(savedpassword, password);
+      //checking the user inputed password is valid or not
       if (isPasswordValid) {
-        //calling GenerateToken method and logic for generate jwt token
         const token = generateToken(existingUser);
         return token;
       } else {
-        throw new error("Invalid Password");
+        throw new Error("Incorrect Password");
       }
     } else {
-      throw new error("User not found");
+      throw new Error("User not found");
     }
   } catch (error) {
-    throw new error("Invalid Credentials");
+    throw new Error("Invalid credentials");
   }
 };
 
